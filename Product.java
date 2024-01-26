@@ -33,6 +33,11 @@ public abstract class Product {
     public void description(){
         System.out.println("The products we sell are in a demand around the world");
     }
+
+    public int getID() {
+        return ID;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -137,7 +142,7 @@ class Book extends Product {
         display();
     }
 }
-class Catalog<T extends Product>{
+class Catalog{
    protected final Product[] products = {
             new Electronic("PHONE","Apple","Iphone",1299.99),
             new Electronic("LAPTOP","HP","Hp spectre",499.99),

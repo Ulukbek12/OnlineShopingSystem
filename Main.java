@@ -1,15 +1,7 @@
 package OnlineShopingSystem;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Map;
 import java.util.Scanner;
-
-import static OnlineShopingSystem.RegistrationLogin.login;
-import static OnlineShopingSystem.RegistrationLogin.register;
 
 //        Product phone = new Electronic("PHONE","Apple","Iphone",
 //                1299.99);
@@ -49,10 +41,14 @@ import static OnlineShopingSystem.RegistrationLogin.register;
 //            cart.displayCart();
 //             catalog.displayCatalog();
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
+    static RegistrationLogin registrationLogin = new RegistrationLogin();
+    static boolean  app = true;
     public static void main(String[] args) {
+        beginning();
 
-        Scanner scanner = new Scanner(System.in);
-        boolean app = true;
+    }
+    static void beginning(){
         try {
             while (app) {
                 System.out.println("1. Login");
@@ -65,10 +61,16 @@ public class Main {
 
                 switch (choice) {
                     case 1:
-                        login(scanner);
+                        registrationLogin.login(scanner);
+                        if(RegistrationLogin.loggedRegistered){
+                            app = false;
+                        }
                         break;
                     case 2:
-                        register(scanner);
+                        registrationLogin.register(scanner);
+                        if(RegistrationLogin.loggedRegistered){
+                            app = false;
+                        }
                         break;
                     case 3:
                         System.out.println("Exiting the application. Goodbye!");
@@ -86,66 +88,4 @@ public class Main {
 }
 
 
-class RegistrationLogin {
-    private static final String USER_DATA_FILE = "userdata.txt";
-    User customer;
-    //The main goal of this method is to convert file data to userData (hashMap)
-    private static Map<String,String> readUserData(){
-        Map<String,String> userData = new HashMap<>();
-        try(Scanner fileLine = new Scanner(new File(USER_DATA_FILE))){
-            while(fileLine.hasNext()){
-                String line = fileLine.nextLine();
-                String[] parts = line.split(",");
-                if(parts.length == 2){
-                    userData.put(parts[0],parts[1]);
-                }
-            }
-        }
-        catch (IOException e){
-
-        }
-        return userData;
-    }
-    private static void writeUserData(Map<String,String> userData){//opposite it gets all userData and pushes it to file
-        try(FileWriter fileWriter = new FileWriter(USER_DATA_FILE)){
-            for(Map.Entry<String,String> entry : userData.entrySet()){
-                fileWriter.write(entry.getKey() + "," + entry.getValue());
-            }
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-    static void login(Scanner scanner) {
-        System.out.println("Enter username: ");
-        String username = scanner.nextLine();
-        System.out.println("Enter password: ");
-        String password = scanner.nextLine();
-        Map<String,String> userData = readUserData();
-        if(userData.containsKey(username) && userData.get(username).equals(password)) {
-            System.out.println("Login successful. Welcome, " + username + "!");
-
-        } else {
-            System.out.println("Login failed. Invalid username or password.");
-        }
-    }
-    static void register(Scanner scanner){
-        System.out.println("Enter new username: ");
-        String username = scanner.nextLine();
-        System.out.println("Enter new password: ");
-        String password = scanner.nextLine();
-        Map<String,String> userData = readUserData();
-
-        if(!userData.containsKey(username)){
-            userData.put(username,password);
-            writeUserData(userData);
-
-            User customer = new Customer(username,22,10000.0);
-//            ShoppingCart cart = new ShoppingCart(catalog,customer);
-            System.out.println("Registration successful. You can now log in with your new account.");
-        } else {
-            System.out.println("Registration failed. Username already exists.");
-        }
-    }
-}
 

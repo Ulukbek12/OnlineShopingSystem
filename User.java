@@ -55,7 +55,7 @@ class ShoppingCart {
     private List<Product> catalog;
     private User customer;
 
-    public ShoppingCart(Catalog<Product> catalog, User customer) {
+    public ShoppingCart(Catalog catalog, User customer) {
         this.catalog = catalog.getCatalog();
         this.customer = customer;
     }
@@ -92,6 +92,7 @@ class ShoppingCart {
             }
         }
     }
+
 
     public void displayCart(){
         System.out.print(customer.name + "'s " + getClass().getSimpleName() + ": ");
